@@ -1,0 +1,24 @@
+{
+  "name": "fibjs_ncpu",
+  "version": "0.0.2",
+  "description": "fibjs",
+  "main": "./dist/ncpu.js",
+  "types": "./@types/ncpu.d.ts",
+  "private": false,
+  "author": "multi-threaded library that fibjs run function worker",
+  "keywords": ["fibjs","multi-worker-thread"],
+  "homepage": "https://github.com/lhkzh/fibjs_ncpu",
+  "bugs": "https://github.com/lhkzh/fibjs_ncpu/issues",
+  "license": "ISC",
+  "engines": {
+    "fibjs": ">0.32.0"
+  },
+  "devDependencies": {
+    "@fibjs/types": "^0.33.0"
+  },
+  "files": [
+    "@types",
+    "dist"
+  ],
+  "dependencies": {}
+}
