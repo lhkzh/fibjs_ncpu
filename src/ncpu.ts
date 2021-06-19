@@ -212,10 +212,7 @@ if (typeof (Master) == 'undefined') {
 
     function get_deep_fn(method: string) {
         if (method.includes('{')) {
-            return new Function(
-                'args',
-                `let fnc = ${method};return fnc(...args);`
-            );
+            return new Function('$_ARGS', `return (${method})(...$_ARGS);`);
         }
         let arr = method.split(".");
         let fn: Function = c_mods[arr[0]] || global[arr[0]];
@@ -250,7 +247,7 @@ if (typeof (Master) == 'undefined') {
                         global[mod_name] = c_mods[mod_name];
                     }
                 } else {
-                    data.rsp = get_deep_fn(data.fn).apply(null, args);
+                    data.rsp = get_deep_fn(data.fn)(args);
                 }
             } catch (e) {
                 data.err = `${e},${data.fn}_${JSON.stringify(args)}`;

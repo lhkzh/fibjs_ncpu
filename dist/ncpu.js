@@ -199,7 +199,7 @@ else {
     let c_mods = {};
     function get_deep_fn(method) {
         if (method.includes('{')) {
-            return new Function('args', `let fnc = ${method};return fnc(...args);`);
+            return new Function('$_ARGS', `return (${method})(...$_ARGS);`);
         }
         let arr = method.split(".");
         let fn = c_mods[arr[0]] || global[arr[0]];
@@ -238,7 +238,7 @@ else {
                     }
                 }
                 else {
-                    data.rsp = get_deep_fn(data.fn).apply(null, args);
+                    data.rsp = get_deep_fn(data.fn)(args);
                 }
             }
             catch (e) {
