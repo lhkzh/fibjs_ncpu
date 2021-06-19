@@ -197,9 +197,10 @@ if (typeof (Master) == 'undefined') {
 }
 else {
     let c_mods = {};
+    let c_fnReg = /[(=]/;
     function get_deep_fn(method) {
-        if (method.includes('{')) {
-            return new Function('$_ARGS', `return (${method})(...$_ARGS);`);
+        if (c_fnReg.test(method)) {
+            return new Function(`return (${method})(...arguments);`);
         }
         let arr = method.split(".");
         let fn = c_mods[arr[0]] || global[arr[0]];
@@ -238,7 +239,7 @@ else {
                     }
                 }
                 else {
-                    data.rsp = get_deep_fn(data.fn)(args);
+                    data.rsp = get_deep_fn(data.fn)(...args);
                 }
             }
             catch (e) {
