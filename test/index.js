@@ -33,6 +33,15 @@ describe("fibjs_ncpu", () => {
         var rsp = NCPU.mod("msgpack").encode(obj);
         assert.isTrue(rsp.equals(require("msgpack").encode(obj)));
     });
+    it("model_hash", ()=>{
+        NCPU.mod("hash");
+        var rsp = NCPU.run("hash.sha512($).digest($)", ["aabb","hex"]);
+        assert.isTrue(rsp==require("hash").sha512("aabb").digest("hex"));
+        var rsp = NCPU.run("hash.sha512($).digest(\"hex\")", ["aabb"]);
+        assert.isTrue(rsp==require("hash").sha512("aabb").digest("hex"));
+        var rsp = NCPU.run("hash.sha512($).digest(hex)", ["aabb"]);
+        assert.isTrue(rsp==require("hash").sha512("aabb").digest("hex"));
+    });
 });
 
 

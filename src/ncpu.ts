@@ -209,17 +209,36 @@ if (typeof (Master) == 'undefined') {
     }
 } else {
     let c_mods = {};
-    let c_fnReg = /[(=]/;
-    function get_deep_fn(method: string) {
-        if (c_fnReg.test(method)) {
-            return new Function( `return (${method})(...arguments);`);
+    let c_fnReg = /[{=]/;
+    let c_fsReg = /'|"/g;
+    function _run_fn(fn:string, args:any[]){
+        if(c_fnReg.test(fn)){
+            return (new Function(`return (${fn})(...arguments);`))(...args);
         }
-        let arr = method.split(".");
-        let fn: Function = c_mods[arr[0]] || global[arr[0]];
-        for (let i = 1; i < arr.length; i++) {
-            fn = fn[arr[i]];
+        let fa = fn.split("."), fe=fa[0];
+        let fo = c_mods[fe] || global[fe];
+        for (let i = 1; i < fa.length; i++) {
+            fe = fa[i];
+            if(fe.endsWith(')')){
+                if(fe.endsWith('()')){
+                    fo = fo[fe.substr(0,fe.length-2)]();
+                }else if(fe.endsWith('($)')){
+                    fo = fo[fe.substr(0,fe.length-3)](args.shift());
+                }else{
+                    let x = fe.lastIndexOf('(');
+                    fo = fo[fe.substr(0,x)](fe.substring(x+1,fe.length-1).replace(c_fsReg,""));
+                }
+            }else{
+                fo = fo[fe];
+            }
+            if(!fo){
+                return fo;
+            }
         }
-        return fn;
+        if(util.isFunction(fo)){
+            return fo(...args);
+        }
+        return fo;
     }
 
     Master.onmessage = e => {
@@ -247,7 +266,7 @@ if (typeof (Master) == 'undefined') {
                         global[mod_name] = c_mods[mod_name];
                     }
                 } else {
-                    data.rsp = get_deep_fn(data.fn)(...args);
+                    data.rsp = _run_fn(data.fn,args);
                 }
             } catch (e) {
                 data.err = `${e},${data.fn}_${JSON.stringify(args)}`;

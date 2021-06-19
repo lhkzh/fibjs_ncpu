@@ -33,4 +33,9 @@ console.log(r.reduce((p,c)=>p+c,0),r.reduce((p,c)=>p+c,0)==17711)
 NCPU.mod("encoding").msgpack.encode([2,3,5]);
 var r = NCPU.mod("json").encode([2,3,5]);
 console.log(r,r=='[2,3,5]');
+NCPU.mod("hash");//init_regist_module
+var r = NCPU.run("hash.sha512($).digest($)", ["aabb","hex"]);
+console.log(r,r==require("hash").sha512("aabb").digest("hex"));
+
+
 ```

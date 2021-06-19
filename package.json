@@ -1,6 +1,6 @@
 {
   "name": "fibjs_ncpu",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "fibjs",
   "main": "./dist/ncpu.js",
   "types": "./@types/ncpu.d.ts",
