@@ -18,7 +18,9 @@
   },
   "files": [
     "@types",
-    "dist"
+    "dist",
+    "package.json",
+    "README"
   ],
   "dependencies": {}
 }
